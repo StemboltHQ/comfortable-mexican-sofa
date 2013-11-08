@@ -5,7 +5,8 @@ module ComfortableMexicanSofa::Fixture::Layout
       Dir["#{path}*/"].each do |path|
         identifier = path.split('/').last
         
-        layout = self.site.layouts.find_or_initialize_by_identifier(identifier)
+        layout = self.site.layouts.where(:identifier => identifier).
+          first_or_initialize
         layout.parent = parent
         
         # setting attributes
@@ -21,7 +22,7 @@ module ComfortableMexicanSofa::Fixture::Layout
         # setting content
         if File.exists?(content_path = File.join(path, 'content.html'))
           if fresh_fixture?(layout, content_path)
-            layout.content = File.open(content_path).read
+            layout.content = read_as_haml(content_path)
           end
         end
         if File.exists?(content_path = File.join(path, 'stylesheet.css'))
