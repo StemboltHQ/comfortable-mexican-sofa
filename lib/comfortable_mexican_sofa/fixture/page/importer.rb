@@ -120,7 +120,7 @@ module ComfortableMexicanSofa::Fixture::Page
           page.label = attrs['label']
 
           first_layout = site.layouts.where(:identifier => attrs['layout']).first
-          page.layout = first_layout || parent.try(:layout)
+          page.layout = first_layout || page.parent.try(:layout) || site.layouts.first
 
           page.is_published = attrs['is_published'].nil?? true : attrs['is_published']
           page.position = attrs['position'] if attrs['position']
